@@ -1,6 +1,19 @@
-# Auditing Shapley attribution and measurement coverage in literature-derived alloy portfolios
+# Shapley identifiability and measurement coverage in magnetocaloric alloy portfolios
+## Revision of 31 October 2026
 
-Data and reproducible analysis code by **Kağan Şarlar**, Karamanoğlu Mehmetbey University, Karaman, Türkiye. Contact: kagansarlar@kmu.edu.tr. Source version: **8.0.0** (23 October 2026).
+The revised manuscript adds an independent La(Fe,Si)13 magnetocaloric analysis, distinguishes measured-score completion from known-access-value completion, and calculates joint ranking certificates. The nested H–C example is not a third independent dataset. New inputs and fully reproducible code are in [revision_20261031](revision_20261031/README.md), with their own dependency versions and data-license attribution.
+
+```bash
+cd revision_20261031
+python -m pip install -r requirements.txt
+python run_all.py
+```
+
+The new runner works offline once dependencies are installed. It regenerates the revision analyses and figures; generated outputs remain untracked. The original version 8 source and long calibration workflow are preserved below. Its access-value completion assumptions should be distinguished from the new measured-score class. The new NIMS reanalysis and completion calculations are not contained in the old Zenodo v8 DOI. No continuous composition-grid results are used in the revised manuscript.
+
+## Preserved version 8 workflow
+
+Data and reproducible analysis code by **Kağan Şarlar**, Karamanoğlu Mehmetbey University, Karaman, Türkiye. Contact: kagansarlar@kmu.edu.tr. Historical source version: **8.0.0** (23 October 2026).
 
 The study separates choosing among measured alloys from identifying individual elemental contributions. Shapley allocations describe access to the defined candidate portfolio. Missing compositions do not provide evidence of zero physical performance, and bootstrap stability cannot supply missing counterfactuals.
 

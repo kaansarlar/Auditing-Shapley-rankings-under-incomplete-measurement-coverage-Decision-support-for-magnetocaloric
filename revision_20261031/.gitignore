@@ -1,0 +1,5 @@
+magnetic_results/
+magnetic_figures/
+revision_code/results/
+__pycache__/
+*.pyc
