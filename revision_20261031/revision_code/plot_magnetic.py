@@ -65,7 +65,7 @@ def main():
         axs[0].hlines(y,z['min'],z['max'],lw=2.4,color=color,label=label)
         axs[0].scatter(z['max'],y,c=color,s=10)
     axs[0].set_yticks(range(5),players);axs[0].invert_yaxis();axs[0].set_xlim(-.02,1.03)
-    axs[0].legend(frameon=False,fontsize=7.5,loc='lower right');axs[0].set_title('a  HEA information classes',loc='left')
+    axs[0].legend(frameon=False,fontsize=7.5,loc='lower left',bbox_to_anchor=(0,1.10),ncol=2,borderaxespad=0);axs[0].set_title('a  HEA information classes',loc='left')
     for i,row in b.iterrows():
         axs[1].hlines(i,row['min'],row['max'],color=C2,lw=3);axs[1].scatter([row['min'],row['max']],[i,i],c=C2,s=12)
     axs[1].set_yticks(range(5),b.player);axs[1].invert_yaxis();axs[1].set_xlim(-.02,.7)
@@ -90,7 +90,7 @@ def main():
             axs[0].scatter([row[p+'_min'],row[p+'_max']],[i+off]*2,c=color,s=10)
         if row.certified_leader=='H':axs[0].text(.73,i,'H',va='center',ha='center',color=C3,fontweight='bold')
     axs[0].set_yticks(range(8),labels);axs[0].invert_yaxis();axs[0].set_xlim(-.01,.77)
-    axs[0].set_xlabel('Marginal Shapley bounds');axs[0].legend(frameon=False,ncol=2,fontsize=8,loc='lower right')
+    axs[0].set_xlabel('Marginal Shapley bounds');axs[0].legend(frameon=False,ncol=2,fontsize=8,loc='lower left',bbox_to_anchor=(0,1.10),borderaxespad=0)
     axs[0].set_title('a  Which H-C support scores are revealed?',loc='left')
     axs[0].text(.73,-.65,'Certified\nleader',ha='center',fontsize=7.5,color=C3)
     axs[1].bar(['Binary\npresence','Composition\namounts'],rep.mae_K,color=[C1,C2])
