@@ -6,7 +6,8 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyBboxPatch
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Circle
+from matplotlib.path import Path as MplPath
 
 ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/'magnetic_results';FIG=ROOT/'magnetic_figures';FIG.mkdir(exist_ok=True)
@@ -16,24 +17,85 @@ C1='#a75237';C2='#267a80';C3='#655386'
 
 
 def save(fig,name):
-    fig.savefig(FIG/(name+'.png'),dpi=350,bbox_inches='tight')
+    fig.savefig(FIG/(name+'.png'),dpi=(600 if name=='Fig1_audit_workflow' else 350),bbox_inches='tight')
     fig.savefig(FIG/(name+'.pdf'),bbox_inches='tight')
+    if name=='Fig1_audit_workflow':
+        with plt.rc_context({'svg.fonttype':'none'}):fig.savefig(FIG/(name+'.svg'),bbox_inches='tight')
     plt.close(fig)
 
 
+def draw_audit_workflow():
+    """Vector workflow; all connectors terminate outside card boundaries."""
+    fig,ax=plt.subplots(figsize=(10.8,5.45))
+    fig.subplots_adjust(left=0,right=1,bottom=0,top=1)
+    ax.set_xlim(0,10.8);ax.set_ylim(0,5.45);ax.axis('off')
+    navy='#173e50';teal='#17777b';purple='#675488';orange='#b56b3c'
+    ink='#203845';muted='#546672';line='#718792'
+    # Group backgrounds make the two information assumptions visibly parallel.
+    for x,w,color in [(.08,3.12,'#f3f7fa'),(3.89,3.16,'#f0f7f6'),(7.79,2.93,'#f7f5f9')]:
+        ax.add_patch(FancyBboxPatch((x,.24),w,4.76,boxstyle='round,pad=0,rounding_size=.14',
+                                  facecolor=color,edgecolor='none',zorder=0))
+    for x,label,c in [(.25,'PORTFOLIO DEFINITION',navy),(4.07,'KNOWN INFORMATION',teal),(7.98,'AUDIT AND NEXT STEPS',purple)]:
+        ax.text(x,5.22,label,color=c,fontsize=12.5,fontweight='bold',va='center')
+
+    def card(x,y,w,h,c,num,title,body,formula=None):
+        ax.add_patch(FancyBboxPatch((x,y),w,h,boxstyle='round,pad=0,rounding_size=.10',
+                         facecolor='white',edgecolor=c,linewidth=1.2,zorder=3))
+        # Small numbered badges and a colored title supply the visual hierarchy.
+        ax.add_patch(Circle((x+.26,y+h-.27),.135,facecolor=c,edgecolor='none',zorder=4))
+        ax.text(x+.26,y+h-.27,num,ha='center',va='center',fontsize=9.4,fontweight='bold',color='white',zorder=5)
+        ax.text(x+.49,y+h-.16,title,ha='left',va='top',fontsize=13.8,fontweight='bold',
+                color=c,linespacing=1.17,zorder=5)
+        ax.text(x+.20,y+.58 if formula else y+(.73 if num=='4' else .55),body,ha='left',va='center',
+                fontsize=13.5,color=ink,linespacing=1.40,zorder=5)
+        if formula:ax.text(x+.20,y+.20,formula,ha='left',va='center',fontsize=12.4,color=muted,zorder=5)
+
+    leftx=.25;leftw=2.78;midx=4.07;midw=2.80;rightx=7.98;rightw=2.54
+    topy=2.97;lowy=.60;h=1.70
+    card(leftx,topy,leftw,h,navy,'1','Audit the alloy\nrecords',
+         'Composition and process\nEndpoint and field')
+    card(leftx,lowy,leftw,h,navy,'2','Define the finite\ngame',
+         'Choose utility / baseline\nMap supports to scores')
+    ax.text(4.11,4.88,'3  Declare the information class',fontsize=11.2,fontweight='bold',color=teal)
+    # Both alternatives retain the measured support scores.
+    card(midx,topy,midw,h,teal,'A','Measured scores\nonly',
+         'Fix measured scores\nUnknown scores in [0, M]',
+         r'$q(S)=q_{\mathrm{obs}}(S),\quad S\ \mathrm{observed}$')
+    card(midx,lowy,midw,h,teal,'B','Scores and access\nvalues fixed',
+         'Keep measured scores\nAdd access equalities',
+         r'$v_q(S)=v_{\mathrm{obs}}(S),\quad S\ \mathrm{observed}$')
+    card(rightx,2.90,rightw,1.77,purple,'4','Compute bounds\nand certificates',
+         'Allocation bounds\nRanking certificates')
+    ax.text(rightx+.20,3.10,'Identified  /  unresolved',color=muted,fontsize=12.1,zorder=5)
+    card(rightx,lowy,rightw,h,orange,'5','Specify further\nevidence',
+         'Coverage / amounts\nReplication / process')
+
+    # Ports are separated from cards by 0.08 coordinate units, even at arrow tips.
+    # Only orthogonal connectors are used; none pass over a card or its text.
+    def arrow(points):
+        path=MplPath(points,[MplPath.MOVETO]+[MplPath.LINETO]*(len(points)-1))
+        ax.add_patch(FancyArrowPatch(path=path,arrowstyle='-|>',mutation_scale=13,
+                         linewidth=1.6,color=line,zorder=2,capstyle='round',joinstyle='round'))
+    def wire(points):
+        xs,ys=zip(*points);ax.plot(xs,ys,color=line,lw=1.6,zorder=2,solid_capstyle='round')
+    lc=leftx+leftw/2;tc=topy+h/2;bc=lowy+h/2
+    arrow([(lc,topy-.08),(lc,lowy+h+.08)])
+    split=3.53
+    wire([(leftx+leftw+.08,bc),(split,bc),(split,tc)])
+    ax.add_patch(Circle((split,bc),.036,facecolor=line,edgecolor='none',zorder=2))
+    arrow([(split,tc),(midx-.08,tc)])
+    arrow([(split,bc),(midx-.08,bc)])
+    merge=7.42;entry=3.53
+    wire([(midx+midw+.08,tc),(merge,tc),(merge,bc),(midx+midw+.08,bc)])
+    ax.add_patch(Circle((merge,entry),.036,facecolor=line,edgecolor='none',zorder=2))
+    arrow([(merge,entry),(rightx-.08,entry)])
+    rc=rightx+rightw/2
+    arrow([(rc,2.90-.08),(rc,lowy+h+.08)])
+    save(fig,'Fig1_audit_workflow')
+
+
 def main():
-    fig,ax=plt.subplots(figsize=(9.5,3.4));ax.axis('off')
-    boxes=[(.02,.64,.25,.22,'Audit material records\nComposition, endpoint and field'),
-           (.37,.64,.25,.22,'Define the finite support game\nUtility and background score'),
-           (.73,.64,.25,.22,'Declare known information\nMeasured scores or access values'),
-           (.08,.13,.36,.24,'Calculate admissible conclusions\nShapley ranges and ranking certificates'),
-           (.59,.13,.36,.24,'Specify the next evidence\nMissing supports, quantities or repeatability')]
-    for x,y,w,h,t in boxes:
-        ax.add_patch(FancyBboxPatch((x,y),w,h,boxstyle='round,pad=.01',fc='#e9f1f1',ec=C2,lw=1.2))
-        ax.text(x+w/2,y+h/2,t,ha='center',va='center',fontsize=9)
-    for start,end in [((.27,.75),(.37,.75)),((.62,.75),(.73,.75)),((.855,.64),(.26,.37)),((.44,.25),(.59,.25))]:
-        ax.annotate('',xy=end,xytext=start,arrowprops={'arrowstyle':'->','color':'#435964','lw':1.3})
-    fig.tight_layout();save(fig,'Fig1_audit_workflow')
+    draw_audit_workflow()
 
     d=pd.read_csv(ROOT/'magnetic_data/nims_primary_2T_lowfield.csv')
     s=pd.read_csv(OUT/'nims_broad_supports.csv')
