@@ -140,7 +140,7 @@ def main():
     fig.tight_layout();save(fig,'Fig3_completion_bounds')
 
     q=pd.read_csv(OUT/'nims_HC_all_information_states.csv').fillna({'known_nonempty':'','certified_leader':''})
-    rep=pd.read_csv(OUT/'nims_representation_comparison.csv')
+    rep=pd.read_csv(ROOT/'matminer_results/representation_metrics.csv');rep=rep[rep.partition.eq('primary')].set_index('representation').loc[['binary','amounts','matminer_host','combined']]
     fig,axs=plt.subplots(1,2,figsize=(10,4.3),gridspec_kw={'width_ratios':[1.7,1]})
     labels=[]
     for i,row in q.iterrows():
@@ -155,10 +155,11 @@ def main():
     axs[0].set_xlabel('Marginal Shapley bounds');axs[0].legend(frameon=False,ncol=2,fontsize=8,loc='lower left',bbox_to_anchor=(0,1.10),borderaxespad=0)
     axs[0].set_title('a  Which H-C support scores are revealed?',loc='left')
     axs[0].text(.73,-.65,'Certified\nleader',ha='center',fontsize=7.5,color=C3)
-    axs[1].bar(['Binary\npresence','Composition\namounts'],rep.mae_K,color=[C1,C2])
-    axs[1].set_ylim(0,23);axs[1].set_ylabel('Source-grouped out-of-fold MAE (K)')
+    axs[1].barh(['Binary','Amounts','Host descriptors','Combined'],rep.mae_K,color=[C1,C2,C3,'#b49237'])
+    axs[1].invert_yaxis();axs[1].set_xlim(0,max(rep.mae_K)+5)
+    axs[1].set_xlabel('Source-grouped out-of-fold MAE (K)',fontsize=8)
     axs[1].set_title('b  Representation diagnostic',loc='left')
-    for i,x in enumerate(rep.mae_K):axs[1].text(i,x+.4,f'{x:.2f}',ha='center')
+    for i,x in enumerate(rep.mae_K):axs[1].text(x+.3,i,f'{x:.2f}',va='center',fontsize=8)
     fig.tight_layout();save(fig,'Fig4_ranking_and_amounts')
 
     a=pd.read_csv(ROOT/'revision_code/results/summary.csv')

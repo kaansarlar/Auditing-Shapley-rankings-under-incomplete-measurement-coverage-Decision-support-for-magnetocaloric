@@ -3,3 +3,5 @@ pandas==2.2.3
 scipy==1.17.0
 scikit-learn==1.8.0
 matplotlib==3.10.8
+matminer==0.9.3
+pymatgen==2025.6.14

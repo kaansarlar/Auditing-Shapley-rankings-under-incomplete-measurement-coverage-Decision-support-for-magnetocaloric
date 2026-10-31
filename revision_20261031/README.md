@@ -18,3 +18,11 @@ Outputs are written to `magnetic_results/`, `revision_code/results/` and `magnet
 The new measured-score class fixes attained scores only. The stronger access-value class also fixes observed coalition access values. Bounds, point allocations and ranking certificates are conditional on the declared finite table, utility, baseline and cap. They are not confidence intervals or physical dopant effects.
 
 The HEA baseline and historical long benchmark outputs are archived at https://doi.org/10.5281/zenodo.23602541. This source folder supplements that version; it does not change its contents. The submission ZIP supplies generated revision outputs and a verification record in addition to this source-only folder.
+
+## Matminer extension of 1 November 2026
+
+`run_matminer.py` adds four matched representations and four descriptor-block ablations to the 140-record, 53-source-component NIMS diagnostic. It uses eight predeclared host-only Magpie descriptors (mean and average absolute deviation of d valence electrons, d unfilled states, covalent radius and electronegativity). H and C amounts remain separate coordinates; no unknown atomic sites or structures are assigned. The descriptor-only representation includes those two amounts. The combined model tests incremental benefit over the eight-coordinate amounts baseline.
+
+The original GroupKFold partition is primary; five additional shuffled group partitions (seeds 20261101--20261105) assess partition sensitivity. All models keep the original RF settings and training-fold preprocessing. No descriptor selection or hyperparameter tuning is performed. Block removal is exploratory because features and raw fractions are correlated. `plot_matminer.py` creates the supporting sensitivity figure. Outputs go to `matminer_results/` and remain untracked.
+
+The observed combined model improved MAE on only one of six partitions and two of five primary folds. No stable incremental benefit or new physical mechanism is inferred. This is a result for this fixed feature panel, cohort and learner.

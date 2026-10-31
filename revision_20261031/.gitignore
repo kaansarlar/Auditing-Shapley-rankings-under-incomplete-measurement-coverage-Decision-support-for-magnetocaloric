@@ -3,3 +3,4 @@ magnetic_figures/
 revision_code/results/
 __pycache__/
 *.pyc
+matminer_results/
