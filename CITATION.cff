@@ -1,14 +1,20 @@
 cff-version: 1.2.0
-message: "Please cite the author, study title, repository and the exact commit used."
+message: "Please cite the author, study title, repository, and exact commit used."
 type: software
-title: "Auditing Shapley attribution and measurement coverage in literature-derived alloy portfolios"
+title: "Auditing Shapley rankings under incomplete measurement coverage: Decision support for magnetocaloric alloy screening"
 authors:
   - family-names: "Şarlar"
     given-names: "Kağan"
     affiliation: "Karamanoğlu Mehmetbey University"
     orcid: "https://orcid.org/0000-0002-8871-2357"
-version: "8.0.0"
-date-released: "2026-10-23"
-repository-code: "https://github.com/kaansarlar/Auditing-Shapley-attribution-and-measurement-coverage-in-literature-derived-alloy-portfolios"
+repository-code: "https://github.com/kaansarlar/Shapley-identifiability-and-measurement-coverage-in-magnetocaloric-alloy-portfolios"
 license: MIT
-doi: "10.5281/zenodo.23602541"
+references:
+  - type: software
+    title: "Auditing Shapley attribution and measurement coverage in literature-derived alloy portfolios"
+    authors:
+      - family-names: "Şarlar"
+        given-names: "Kağan"
+    version: "8.0.0"
+    date-released: "2026-10-23"
+    doi: "10.5281/zenodo.23602541"

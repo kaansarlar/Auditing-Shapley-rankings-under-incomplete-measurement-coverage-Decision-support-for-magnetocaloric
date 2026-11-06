@@ -1,15 +1,19 @@
-# Shapley identifiability and measurement coverage in magnetocaloric alloy portfolios
-## Revision of 31 October 2026
+# Auditing Shapley rankings under incomplete measurement coverage: Decision support for magnetocaloric alloy screening
 
-The revised manuscript adds an independent La(Fe,Si)13 magnetocaloric analysis, distinguishes measured-score completion from known-access-value completion, and calculates joint ranking certificates. The nested H–C example is not a third independent dataset. New inputs and fully reproducible code are in [revision_20261031](revision_20261031/README.md), with their own dependency versions and data-license attribution.
+Data and reproducible code for a portfolio ranking audit. The audit distinguishes scores measured for exact constituent combinations from known coalition access values. It calculates conditional Shapley bounds and checks whether a leading constituent remains ahead across all admissible completions. The evaluation uses two magnetocaloric data sources; the H–C catalog is nested within the La–Fe–Si dataset.
+
+## Reproduce the manuscript analyses
+
+Use the [fixed analysis snapshot](https://github.com/kaansarlar/Shapley-identifiability-and-measurement-coverage-in-magnetocaloric-alloy-portfolios/tree/56cacdcade9cab4af1937907d8ef0ca5c73986ce/revision_20261031) for the completion bounds, the H–C information states, the grouped representation comparison, and the paired measurement-coverage experiment. From a local clone:
 
 ```bash
+git checkout --detach 56cacdcade9cab4af1937907d8ef0ca5c73986ce
 cd revision_20261031
 python -m pip install -r requirements.txt
 python run_all.py
 ```
 
-The new runner works offline once dependencies are installed. It regenerates the revision analyses and figures; generated outputs remain untracked. The original version 8 source and long calibration workflow are preserved below. Its access-value completion assumptions should be distinguished from the new measured-score class. The new NIMS reanalysis and completion calculations are not contained in the old Zenodo v8 DOI. No continuous composition-grid results are used in the revised manuscript.
+The runner works offline once dependencies are installed. Numerical outputs and figures are generated locally. The manuscript uses this snapshot, without the separate Matminer exploration available on the default branch. The NIMS analysis and measured-score completion calculations are separate from the historical Zenodo version 8 evidence.
 
 ## Preserved version 8 workflow
 
@@ -92,7 +96,7 @@ python extension/test_extension.py
 
 ## Interpretation
 
-Completion bounds assume a bounded monotone game and preservation of the observed access envelope; completion witnesses do not establish chemical realizability. Support contrasts do not hold processing, fractions, phases or publication effects fixed. Candidate selection is evaluated under the declared utility transformations, not demonstrated refrigeration-device performance. Failure to detect a difference from random is not proof of equivalence; the equivalence-margin analysis is exploratory.
+The historical version 8 bounds assume a bounded monotone game and preservation of the observed access envelope. The manuscript reports measured-score bounds separately. Neither completion class establishes chemical realizability. Support contrasts do not hold processing, fractions, phases or publication effects fixed. Candidate selection is evaluated under the declared utility transformations, not demonstrated refrigeration-device performance. Failure to detect a difference from random is not proof of equivalence; the equivalence-margin analysis is exploratory.
 
 ## Citation and archive
 
