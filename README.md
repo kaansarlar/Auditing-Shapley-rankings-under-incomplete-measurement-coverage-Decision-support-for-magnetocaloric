@@ -116,3 +116,13 @@ This work was supported by TÜBİTAK under the Career Development Program (3501)
 ## License
 
 Original project code is released under the [MIT License](LICENSE). This software license does not relicense literature-derived measurements, source tables, third-party material or original publications. Preserve source attribution and consult the applicable source terms or contact the author where reuse permission is unclear.
+
+## Additional decision audit checks
+
+The [validation script](decision_audit_validation/run_checks.py) reconstructs the same NIMS eligibility cohort from the supplied source CSV, reports retrospective temperature-utility sensitivities, and verifies an explicitly synthetic three-player information example. From a checkout containing this folder, run:
+
+```bash
+python decision_audit_validation/run_checks.py --output results/decision_audit_validation
+```
+
+These checks do not change the fixed analysis snapshot above. They add no measured alloy data, adaptive acquisition policy or large-player runtime claim. Numerical outputs are generated locally and are excluded from the repository. See [the validation notes](decision_audit_validation/README.md) for the assumptions and input checks.
