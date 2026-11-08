@@ -7,7 +7,8 @@ authors:
     given-names: "Kağan"
     affiliation: "Karamanoğlu Mehmetbey University"
     orcid: "https://orcid.org/0000-0002-8871-2357"
-repository-code: "https://github.com/kaansarlar/Shapley-identifiability-and-measurement-coverage-in-magnetocaloric-alloy-portfolios"
+repository-code: "https://github.com/kaansarlar/Auditing-Shapley-rankings-under-incomplete-measurement-coverage-Decision-support-for-magnetocaloric"
+version: "9.0.0"
 license: MIT
 references:
   - type: software

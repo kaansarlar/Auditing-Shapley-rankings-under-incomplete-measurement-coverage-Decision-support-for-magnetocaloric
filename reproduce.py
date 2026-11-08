@@ -14,8 +14,10 @@ ROOT = Path(__file__).resolve().parent
 STAGES = {
     'revision-checks': [
         ['revision_20261108/run_policy_comparison.py'],
+        ['revision_20261108/run_policy_diagnostics.py'],
         ['revision_20261108/run_nims_threshold.py'],
         ['revision_20261108/run_scaling.py'],
+        ['revision_20261108/run_dense_scaling.py'],
         ['revision_20261031/revision_code/run_magnetic.py'],
         ['revision_20261108/plot_completion.py'],
     ],

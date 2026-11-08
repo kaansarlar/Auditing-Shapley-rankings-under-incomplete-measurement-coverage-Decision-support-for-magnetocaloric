@@ -2,7 +2,10 @@
 
 Companion source and inputs for **Auditing Shapley rankings under incomplete measurement coverage: Decision support for magnetocaloric alloy screening**.
 
-For the manuscript, use the [fixed analysis snapshot](https://github.com/kaansarlar/Shapley-identifiability-and-measurement-coverage-in-magnetocaloric-alloy-portfolios/tree/56cacdcade9cab4af1937907d8ef0ca5c73986ce/revision_20261031). The default branch also contains the separate Matminer exploration described below; that exploration is outside the manuscript.
+Use the exact commit cited on the manuscript title page. This directory contains
+the base empirical workflow. Later acquisition, certificate and runtime checks
+are documented in [revision_20261108](../revision_20261108/). The separate
+Matminer exploration below is outside the manuscript.
 
 ## Reproduce
 

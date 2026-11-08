@@ -4,16 +4,24 @@ Data and reproducible code for a portfolio ranking audit. The audit distinguishe
 
 ## Reproduce the manuscript analyses
 
-Use the [fixed analysis snapshot](https://github.com/kaansarlar/Shapley-identifiability-and-measurement-coverage-in-magnetocaloric-alloy-portfolios/tree/56cacdcade9cab4af1937907d8ef0ca5c73986ce/revision_20261031) for the completion bounds, the H–C information states, the grouped representation comparison, and the paired measurement-coverage experiment. From a local clone:
+Use the exact repository commit cited on the manuscript title page. The
+[base empirical workflow](revision_20261031/) supplies completion bounds,
+H–C information states and the grouped representation diagnostic. The
+[additional checks](revision_20261108/) supply adaptive and nonveto acquisition,
+terminal-budget and early-budget diagnostics, Co certificate thresholds and
+coverage-sensitive runtime checks.
 
 ```bash
-git checkout --detach 56cacdcade9cab4af1937907d8ef0ca5c73986ce
-cd revision_20261031
-python -m pip install -r requirements.txt
-python run_all.py
+python -m pip install -r revision_20261031/requirements.txt
+python reproduce.py revision-checks
+python decision_audit_validation/run_checks.py
 ```
 
-The runner works offline once dependencies are installed. Numerical outputs and figures are generated locally. The manuscript uses this snapshot, without the separate Matminer exploration available on the default branch. The NIMS analysis and measured-score completion calculations are separate from the historical Zenodo version 8 evidence.
+The runner works offline once dependencies are installed. Numerical outputs
+and figures are generated locally. The separate Matminer exploration is outside
+the manuscript. Zenodo version 8 supplies the original long calibration evidence;
+it does not contain the subsequent NIMS, completion and acquisition checks.
+The version-9 metadata describe the prepared update, not a newly registered DOI.
 
 ## Preserved version 8 workflow
 

@@ -1,7 +1,7 @@
 {
-  "title": "Auditing Shapley attribution and measurement coverage in literature-derived alloy portfolios: data and reproducible code",
+  "title": "Auditing Shapley rankings under incomplete measurement coverage: data and reproducible code",
   "upload_type": "software",
-  "version": "8.0.0",
+  "version": "9.0.0",
   "creators": [
     {
       "name": "Şarlar, Kağan",
@@ -9,7 +9,7 @@
       "orcid": "0000-0002-8871-2357"
     }
   ],
-  "description": "Data and source code for the empirical portfolio audit, bounded monotone completion analysis, separately reported complete-design simulation generators, and paired measurement-coverage extension. GitHub tracks data and reproducible code; generated results are local outputs. Original experimental sources are identified in the data.",
+  "description": "Data and reproducible code for auditing Shapley rankings under incomplete measurement coverage. Version 9 adds measured-score completion witnesses, independent NIMS La-Fe-Si analysis, utility sensitivity, a three-player ranking example, paired adaptive and nonveto acquisition comparisons, NIMS certificate thresholds and single-revelation obstructions, and sparse and coverage-sensitive runtime checks. A saved-world diagnostic documents nonmonotone early recovery even without observation noise. The separate version 8 archive remains the source of the original long calibration world tables; those long benchmarks were not rerun. No new alloy experiments or optimal acquisition policy are claimed.",
   "keywords": [
     "Shapley value",
     "identifiability",
@@ -20,7 +20,7 @@
   "notes": "Supported by TÜBİTAK Career Development Program (3501), Project No. 125F375. MIT applies to original project software; source-specific terms apply to literature-derived data.",
   "related_identifiers": [
     {
-      "identifier": "https://github.com/kaansarlar/Auditing-Shapley-attribution-and-measurement-coverage-in-literature-derived-alloy-portfolios",
+      "identifier": "https://github.com/kaansarlar/Auditing-Shapley-rankings-under-incomplete-measurement-coverage-Decision-support-for-magnetocaloric",
       "relation": "isSupplementTo",
       "scheme": "url"
     }
