@@ -129,7 +129,7 @@ def main():
     axs[0].set_yticks(range(5),players);axs[0].invert_yaxis();axs[0].set_xlim(-.02,1.03)
     axs[0].legend(frameon=False,fontsize=7.5,loc='lower left',bbox_to_anchor=(0,1.10),ncol=2,borderaxespad=0);axs[0].set_title('a  HEA information classes',loc='left')
     for i,row in b.iterrows():
-        axs[1].hlines(i,row['min'],row['max'],color=C2,lw=3);axs[1].scatter([row['min'],row['max']],[i,i],c=C2,s=12)
+        axs[1].hlines(i,row['min'],row['max'],color=C1,lw=3);axs[1].scatter([row['min'],row['max']],[i,i],c=C1,s=12)
     axs[1].set_yticks(range(5),b.player);axs[1].invert_yaxis();axs[1].set_xlim(-.02,.7)
     axs[1].set_title('b  La-Fe-Si five dopants',loc='left')
     axs[2].scatter(n['min'],[0,1],c=C3,s=40)

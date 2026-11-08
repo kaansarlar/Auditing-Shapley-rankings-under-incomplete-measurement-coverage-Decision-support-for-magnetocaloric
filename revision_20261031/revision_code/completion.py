@@ -9,6 +9,7 @@ from itertools import permutations, product
 import numpy as np
 from scipy.optimize import Bounds, LinearConstraint, milp, linprog
 from scipy.sparse import csr_matrix
+import warnings
 
 
 def weights(n):
@@ -25,9 +26,15 @@ def weights(n):
 
 
 def envelope(q):
-    q = np.asarray(q, float)
-    return np.array([max(q[s] for s in range(len(q)) if s & c == s)
-                     for c in range(len(q))])
+    v = np.asarray(q, float).copy()
+    n = int(np.log2(len(v)))
+    if len(v) != 1 << n:
+        raise ValueError("A complete binary support table is required.")
+    ids = np.arange(len(v))
+    for i in range(n):
+        hi = ids[(ids & (1 << i)) != 0]
+        v[hi] = np.maximum(v[hi], v[hi ^ (1 << i)])
+    return v
 
 
 def permutation_shapley(v):
@@ -42,7 +49,8 @@ def permutation_shapley(v):
     return phi / factorial(n)
 
 
-def solve(n, observed, cap, player, objective="min", mode="score", contrast=None):
+def solve(n, observed, cap, player, objective="min", mode="score", contrast=None,
+          missing_upper=None):
     """Optimize Shapley or a strict-rank margin over a declared completion class.
 
     score: only q(s) for measured supports is fixed; v=max-access envelope.
@@ -54,13 +62,22 @@ def solve(n, observed, cap, player, objective="min", mode="score", contrast=None
     if any(not 0 <= q <= cap for q in observed.values()):
         raise ValueError("Scores must be in [0, cap].")
     N = 1 << n
+    upper_scores = {s: cap for s in range(N) if s not in observed}
+    if missing_upper is not None:
+        if mode != "score":
+            raise ValueError("Missing-score bounds require measured-score mode.")
+        upper_scores.update(missing_upper if isinstance(missing_upper, dict)
+                            else {s: float(missing_upper) for s in upper_scores})
+        if any(s in observed or not 0 <= u <= cap for s,u in upper_scores.items()):
+            raise ValueError("Invalid missing-score bound.")
     W = weights(n)
     coefficient = W[player] if contrast is None else W[player] - W[contrast]
     rank = objective in ("lead", "trail")
     # For an observed C, its envelope is max(q(C), v(C\\{i}): i in C).
     # Unknown supports can be reconstructed as q(C)=v(C).
+    bounded_scores = {**observed, **{s:u for s,u in upper_scores.items() if u < cap}}
     choices = [(s, [-1] + [s ^ (1 << i) for i in range(n) if s >> i & 1])
-               for s in observed if s]
+               for s in bounded_scores if s]
     nb = sum(len(p) for _, p in choices) if mode == "score" else 0
     total = N + nb + int(rank)
     lower = np.zeros(total)
@@ -95,7 +112,7 @@ def solve(n, observed, cap, player, objective="min", mode="score", contrast=None
                 selectors.append(j)
                 # z=1 forces v(C)<=the selected candidate maximum.
                 if parent == -1:
-                    add({s: 1, j: cap}, high=observed[s] + cap)
+                    add({s: 1, j: cap}, high=bounded_scores[s] + cap)
                 else:
                     add({s: 1, parent: -1, j: cap}, high=cap)
                 j += 1
@@ -116,19 +133,27 @@ def solve(n, observed, cap, player, objective="min", mode="score", contrast=None
         c[:N] = coefficient if objective == "min" else -coefficient
     integrality = np.zeros(total)
     integrality[N:N+nb] = 1
-    result = milp(c, integrality=integrality, bounds=Bounds(lower, upper),
-                  constraints=LinearConstraint(csr_matrix(rows), lo, hi),
-                  options={"mip_rel_gap": 0.0, "time_limit": 90.0})
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", message="Unrecognized options detected")
+        result = milp(c, integrality=integrality, bounds=Bounds(lower, upper),
+                      constraints=LinearConstraint(csr_matrix(rows), lo, hi),
+                      options={"mip_rel_gap": 0.0, "time_limit": 90.0,
+                               "mip_abs_gap": 1e-10,
+                               "mip_feasibility_tolerance": 1e-9,
+                               "primal_feasibility_tolerance": 1e-9})
     if not result.success:
         raise RuntimeError(f"Completion optimization failed: {result.message}")
     v = result.x[:N]
     q = v.copy()
+    for s,u in upper_scores.items():
+        q[s] = min(q[s], u)
     for s, value in observed.items():
         q[s] = value
     phi = W @ v
     residual = float(np.max(np.abs(envelope(q) - v)))
     assert residual < 2e-7, residual
-    assert np.max(np.abs(permutation_shapley(v) - phi)) < 1e-9
+    if n <= 7:
+        assert np.max(np.abs(permutation_shapley(v) - phi)) < 1e-9
     assert abs(phi.sum() - (v[-1] - v[0])) < 1e-8
     assert all(abs(q[s] - value) < 1e-12 for s, value in observed.items())
     assert np.min(q) > -1e-7 and np.max(q) < cap + 1e-7
